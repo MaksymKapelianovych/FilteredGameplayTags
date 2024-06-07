@@ -5,6 +5,80 @@
 #include "CoreMinimal.h"
 #include "GameplayTagsManager.h"
 
+// Example of adding native filtered tags from C++:
+//
+// In "YourTags.h"
+//
+// USTRUCT(meta = (GameplayTagFilter = "Action"))
+// struct FActionTag : public FGameplayTag
+// {
+// 	GENERATED_BODY()
+// 	END_FILTERED_TAG_DECL(FActionTag, TEXT("Action"))
+// };
+//
+// USTRUCT(meta = (GameplayTagFilter = "Action.Melee"))
+// struct FMeleeTag : public FActionTag
+// {
+// 	GENERATED_BODY()
+// 	END_FILTERED_TAG_DECL(FMeleeTag, TEXT("Action.Melee"))
+// };
+//
+// struct FNativeActionTags : public FGameplayTagNativeAdder
+// {
+// 	virtual ~FNativeActionTags() {}
+// 	
+// 	FActionTag Walk;
+// 	FActionTag Run;
+// 	FActionTag Jump;
+//
+// 	FMeleeTag Melee_Cut;
+// 	FMeleeTag Melee_Slash;
+// 	FMeleeTag Melee_Pierce;
+// 	
+// 	virtual void AddTags() override
+// 	{
+// 		Walk = FActionTag::AddNativeTag("Walk");
+// 		Run = FActionTag::AddNativeTag("Run");
+// 		Jump = FActionTag::AddNativeTag("Jump");
+// 		Melee_Cut = FMeleeTag::AddNativeTag("Cut");
+// 		Melee_Slash = FMeleeTag::AddNativeTag("Slash");
+// 		Melee_Pierce = FMeleeTag::AddNativeTag("Pierce");
+// 	}
+//
+// 	FORCEINLINE static const FNativeActionTags& Get()
+// 	{
+// 		return StaticInstance;
+// 	}
+//
+// private:
+// 	static FNativeActionTags StaticInstance;
+// };
+//
+// In "YourTags.cpp"
+//
+// #include "YourTags.h"
+// FNativeActionTags FNativeActionTags::StaticInstance;
+//
+// In "YourEditorModule.cpp"
+//
+// #include "GameplayTagsEditorModule.h"
+// ...
+//
+// class FYourEditorModuleModule : public IModuleInterface
+// {
+// public:
+// 	virtual void StartupModule() override
+// 	{
+//		...
+// 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>(TEXT("PropertyEditor"));
+// 		PropertyModule.RegisterCustomPropertyTypeLayout(FActionTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGameplayTagCustomizationPublic::MakeInstance));
+// 		PropertyModule.RegisterCustomPropertyTypeLayout(FMeleeTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGameplayTagCustomizationPublic::MakeInstance));
+//      ...
+// 	}
+//  ...
+// };
+// 
+
 template <typename TagT>
 class TTypedTagStaticImpl
 {
