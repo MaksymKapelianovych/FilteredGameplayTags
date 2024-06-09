@@ -20,14 +20,20 @@ Filtered tags can be defined by inheriting FGameplayTag or other filtered tag:
  };
 ```
 
-Specific filtered tags can be added from C++ using FGameplayTagNativeAdder, which allows to use such tags anywhere else in C++ code:
+Specific filtered tags can be added from C++ using set of macros or FGameplayTagNativeAdder, which allows to use such tags anywhere else in C++ code.
 
 ```
 // "YourTags.h"
- struct FNativeActionTags : public FGameplayTagNativeAdder
- {
- 	virtual ~FNativeActionTags() {}
- 	
+namespace ActionTags // namespace is not necessary, but it helps to keep things organized
+{
+ 	DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN(FActionTag, Equip);
+	DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN(FActionTag, Unequip);
+}
+
+struct FNativeActionTags : public FGameplayTagNativeAdder
+{
+	virtual ~FNativeActionTags() {}
+	
  	FActionTag Walk;
  	FActionTag Run;
  	FActionTag Jump;
@@ -50,16 +56,28 @@ Specific filtered tags can be added from C++ using FGameplayTagNativeAdder, whic
  	FORCEINLINE static const FNativeActionTags& Get()
  	{
  		return StaticInstance;
- 	}
+	}
 
- private:
- 	static FNativeActionTags StaticInstance;
- };
+private:
+	static FNativeActionTags StaticInstance;
+};
+
 
 // "YourTags.cpp"
+namespace ActionTags // namespace is not necessary, but it helps to keep things organized
+{
+	DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT(FActionTag, Equip, "Equip", "Tag to define equip ability");
+	DEFINE_FILTERED_GAMEPLAY_TAG(FActionTag, Unequip, "Unequip");
+	DEFINE_FILTERED_GAMEPLAY_TAG_STATIC_COMMENT(FActionTag, Reload, "Reload", "Tag to define reload ability");
+	DEFINE_FILTERED_GAMEPLAY_TAG_STATIC(FActionTag, Fire, "Fire");
+}
+
 FNativeActionTags FNativeActionTags::StaticInstance;
 
+
 // Usage
+ActionTags::Equip;
+
 FNativeActionTags::Get().Jump;
 FNativeActionTags::Get().Melee_Cut;
 ```
