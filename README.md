@@ -5,20 +5,26 @@ Filtered tags can be defined by inheriting FGameplayTag or other filtered tag:
 
 ```
 // Filtered tag that can only accept child tags of "Action" category
- USTRUCT(meta = (GameplayTagFilter = "Action"))
+ USTRUCT(meta = (GameplayTagFilter = "Action", PresentAsType = "GameplayTag"))
  struct FActionTag : public FGameplayTag
  {
  	GENERATED_BODY()
  	END_FILTERED_TAG_DECL(FActionTag, TEXT("Action"))
  };
 
- USTRUCT(meta = (GameplayTagFilter = "Action.Melee"))
+ USTRUCT(meta = (GameplayTagFilter = "Action.Melee", PresentAsType = "GameplayTag"))
  struct FMeleeTag : public FActionTag
  {
  	GENERATED_BODY()
  	END_FILTERED_TAG_DECL(FMeleeTag, TEXT("Action.Melee"))
  };
 ```
+
+`GameplayTagFilter` is responsible for indicating parent tag for filtering in TagPicker widget.
+
+`PresentAsType` is responsible for setting type customization the same as for FGameplayTag (otherwise you need to register you own IPropertyTypeCustomization, but 99% you will want to use customization for FGameplayTag)
+
+`END_FILTERED_TAG_DECL` register parent tag in TagManager, provides a bunch ob useful functions to add tags (such as `AddNativeTag`)
 
 Specific filtered tags can be added from C++ using set of macros or FGameplayTagNativeAdder, which allows to use such tags anywhere else in C++ code.
 
@@ -82,24 +88,8 @@ FNativeActionTags::Get().Jump;
 FNativeActionTags::Get().Melee_Cut;
 ```
 
-There is two downsides now: 
- - filtered native tags can't have comments due to logic of handling native tags in GameplayTagsManager (only FNativeGameplayTag can have comments)
- - for every custom filtered tag struct custom IPropertyTypeCustomization needs to be registered (though it is the same as for FGameplayTag), otherwise you won't be able to set default values for tag variables
-```
-class FYourEditorModuleModule : public IModuleInterface
-{
-	public:
-	virtual void StartupModule() override
-	{
-		...
-		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>(TEXT("PropertyEditor"));
-		PropertyModule.RegisterCustomPropertyTypeLayout(FActionTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGameplayTagCustomizationPublic::MakeInstance));
-		PropertyModule.RegisterCustomPropertyTypeLayout(FMeleeTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FGameplayTagCustomizationPublic::MakeInstance));
- 	 	...
-	}
-	...
-};
-```
+There is one downside now: 
+ - tags added by `FYourTag::AddNativeTag` function can't have comments due to logic of handling native tags in GameplayTagsManager (only FNativeGameplayTag can have comments). But you can use macros to add tags with comment
 
 
 How it is looks in BP?

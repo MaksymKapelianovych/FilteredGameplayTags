@@ -8,14 +8,14 @@
 
 // In "YourTags.h"
 //
-// USTRUCT(meta = (GameplayTagFilter = "Action"))
+// USTRUCT(meta = (GameplayTagFilter = "Action", PresentAsType = "GameplayTag")) // instead of PresentAsType you can manually register IPropertyTypeCustomization)
 // struct FActionTag : public FGameplayTag
 // {
 // 	GENERATED_BODY()
 // 	END_FILTERED_TAG_DECL( FActionTag, TEXT( "Action" ) )
 // };
 //
-// USTRUCT(meta = (GameplayTagFilter = "Action.Melee"))
+// USTRUCT(meta = (GameplayTagFilter = "Action.Melee", PresentAsType = "GameplayTag")) // instead of PresentAsType you can manually register IPropertyTypeCustomization)
 // struct FMeleeTag : public FActionTag
 // {
 // 	GENERATED_BODY()
@@ -82,25 +82,6 @@
 // // Or you can use FGameplayTagNativeAdder
 // FNativeActionTags FNativeActionTags::StaticInstance;
 
-
-// In "YourEditorModule.cpp"
-//
-// #include "GameplayTagsEditorModule.h"
-// ...
-//
-// class FYourEditorModuleModule : public IModuleInterface
-// {
-// public:
-// 	virtual void StartupModule() override
-// 	{
-//		...
-// 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked< FPropertyEditorModule >( TEXT( "PropertyEditor" ) );
-// 		PropertyModule.RegisterCustomPropertyTypeLayout( FActionTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic( &FGameplayTagCustomizationPublic::MakeInstance ) );
-// 		PropertyModule.RegisterCustomPropertyTypeLayout( FMeleeTag::StaticStruct()->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic( &FGameplayTagCustomizationPublic::MakeInstance ) );
-//      ...
-// 	}
-//  ...
-// };
 
 
 /**
