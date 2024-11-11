@@ -202,8 +202,11 @@ class TTypedTagStaticImpl
 
 	TTypedTagStaticImpl()
 	{
-		// Force generate root tag, in case there is only filtered tags definition in C++ 
-		StaticImpl.RootTag = UGameplayTagsManager::Get().AddNativeGameplayTag( TagT::GetRootTagStr() );
+		UGameplayTagsManager::OnLastChanceToAddNativeTags().AddLambda( [ this ]()
+		{
+			// Force generate root tag, in case there is only filtered tags definition in C++ 
+			StaticImpl.RootTag = UGameplayTagsManager::Get().AddNativeGameplayTag( TagT::GetRootTagStr() );
+		} );
 	}
 	TagT RootTag;
 	static TTypedTagStaticImpl StaticImpl;
