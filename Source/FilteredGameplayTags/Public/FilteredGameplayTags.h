@@ -235,12 +235,11 @@ protected:	\
 };	\
 Expose_TNameOf( TagType )	\
 template<>	\
-struct TStructOpsTypeTraits< TagType > : public TStructOpsTypeTraitsBase2< TagType >	\
+struct TStructOpsTypeTraits< TagType > : public TStructOpsTypeTraits< FGameplayTag >	\
 {	\
 	enum	\
 	{	\
-		WithExportTextItem = true,	\
-		WithImportTextItem = true	\
+		WithExportTextItem = true	\
 	};
 
 
