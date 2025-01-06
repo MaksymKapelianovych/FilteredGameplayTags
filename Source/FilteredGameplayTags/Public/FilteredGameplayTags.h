@@ -1,4 +1,6 @@
-﻿#pragma once
+﻿// Copyright 2024, Maksym Kapelianovych. Licensed under MIT license.
+
+#pragma once
 
 #include "CoreMinimal.h"
 #include "GameplayTagsManager.h"

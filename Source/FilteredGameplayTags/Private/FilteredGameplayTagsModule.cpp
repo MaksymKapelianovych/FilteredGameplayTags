@@ -1,4 +1,5 @@
-﻿// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright 2024, Maksym Kapelianovych. Licensed under MIT license.
+
 #include "Modules/ModuleManager.h"
 
 IMPLEMENT_MODULE( FDefaultModuleImpl, FilteredGameplayTags )
