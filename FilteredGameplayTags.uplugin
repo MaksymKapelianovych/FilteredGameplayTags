@@ -3,21 +3,24 @@
 	"Version": 2,
 	"VersionName": "1.1",
 	"FriendlyName": "FilteredGameplayTags",
-	"Description": "",
-	"Category": "Other",
-	"CreatedBy": "",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"CanContainContent": true,
-	"IsBetaVersion": false,
-	"IsExperimentalVersion": false,
+	"Description": "Small plugin for creating filtered gameplay tags",
+	"Category": "Programming",
+	"CreatedBy": "Maksym Kapelianovych",
+	"CreatedByURL": "https://github.com/MaksymKapelianovych",
+	"DocsURL": "https://github.com/MaksymKapelianovych/FilteredGameplayTags/blob/main/README.md",
+	"FabURL": "com.epicgames.launcher://ue/Fab/product/58535000-1360-4c4d-a966-8fe66a83f04a",
+	"SupportURL": "https://github.com/MaksymKapelianovych/FilteredGameplayTags/issues",
+	"EngineVersion": "5.5.0",
+	"CanContainContent": false,
 	"Installed": false,
 	"Modules": [
 		{
 			"Name": "FilteredGameplayTags",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64"
+			]
 		}
 	]
 }
