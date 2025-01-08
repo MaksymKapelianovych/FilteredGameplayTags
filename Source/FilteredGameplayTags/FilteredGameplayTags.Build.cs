@@ -11,7 +11,7 @@ public class FilteredGameplayTags : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
+				"Core", "GameplayTags",
 			}
 			);
 	}
