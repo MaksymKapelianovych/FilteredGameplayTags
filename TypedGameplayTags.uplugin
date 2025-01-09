@@ -3,7 +3,7 @@
 	"Version": 2,
 	"VersionName": "1.1",
 	"FriendlyName": "TypedGameplayTags",
-	"Description": "Small plugin for creating filtered gameplay tags",
+	"Description": "Small plugin for creating typed gameplay tags",
 	"Category": "Programming",
 	"CreatedBy": "Maksym Kapelianovych",
 	"CreatedByURL": "https://github.com/MaksymKapelianovych",
