@@ -6,7 +6,7 @@
 #include "GameplayTagsManager.h"
 #include "NativeGameplayTags.h"
 
-// Example of adding native filtered tags from C++:
+// Example of adding native typed tags from C++:
 
 // In "YourTags.h"
 //
@@ -14,22 +14,22 @@
 // struct FActionTag : public FGameplayTag
 // {
 // 	GENERATED_BODY()
-// 	END_FILTERED_TAG_DECL( FActionTag, TEXT( "Action" ) )
+// 	END_TYPED_TAG_DECL( FActionTag, TEXT( "Action" ) )
 // };
 //
 // USTRUCT(meta = (GameplayTagFilter = "Action.Melee", PresentAsType = "GameplayTag")) // instead of PresentAsType you can manually register IPropertyTypeCustomization)
 // struct FMeleeTag : public FActionTag
 // {
 // 	GENERATED_BODY()
-// 	END_FILTERED_TAG_DECL( FMeleeTag, TEXT( "Action.Melee" ) )
+// 	END_TYPED_TAG_DECL( FMeleeTag, TEXT( "Action.Melee" ) )
 // };
 //
 //
 // // You can define tag with macros (allows to specify comments)
 // namespace ActionTags // namespace is not necessary, but it helps to keep things organized
 // {
-//		DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN( FActionTag, Equip );
-//		DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN( FActionTag, Unequip );
+//		DECLARE_TYPED_GAMEPLAY_TAG_EXTERN( FActionTag, Equip );
+//		DECLARE_TYPED_GAMEPLAY_TAG_EXTERN( FActionTag, Unequip );
 // }
 //
 //
@@ -74,10 +74,10 @@
 // // You can define tag with macros (allows to specify comments)
 // namespace ActionTags // namespace is not necessary, but it helps to keep things organized
 // {
-//		DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT(		 FActionTag, Equip, "Equip", "Tag to define equip ability" );
-//		DEFINE_FILTERED_GAMEPLAY_TAG(				 FActionTag, Unequip, "Unequip" );
-//		DEFINE_FILTERED_GAMEPLAY_TAG_STATIC_COMMENT( FActionTag, Reload, "Reload", "Tag to define reload ability" );
-//		DEFINE_FILTERED_GAMEPLAY_TAG_STATIC(		 FActionTag, Fire, "Fire" );
+//		DEFINE_TYPED_GAMEPLAY_TAG_COMMENT(		 FActionTag, Equip, "Equip", "Tag to define equip ability" );
+//		DEFINE_TYPED_GAMEPLAY_TAG(				 FActionTag, Unequip, "Unequip" );
+//		DEFINE_TYPED_GAMEPLAY_TAG_STATIC_COMMENT( FActionTag, Reload, "Reload", "Tag to define reload ability" );
+//		DEFINE_TYPED_GAMEPLAY_TAG_STATIC(		 FActionTag, Fire, "Fire" );
 // }
 //
 //
@@ -89,35 +89,35 @@
 /**
  * Declares a native gameplay tag that is defined in a cpp with UE_DEFINE_GAMEPLAY_TAG to allow other modules or code to use the created tag variable.
  */
-#define DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN( TagType, TagName ) extern TTypedNativeGameplayTag< TagType > TagName;
+#define DECLARE_TYPED_GAMEPLAY_TAG_EXTERN( TagType, TagName ) extern TTypedNativeGameplayTag< TagType > TagName;
 
 /**
  * Defines a native gameplay tag with a comment that is externally declared in a header to allow other modules or code to use the created tag variable.
  */
-#define DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT( TagType, TagName, Tag, Comment ) \
+#define DEFINE_TYPED_GAMEPLAY_TAG_COMMENT( TagType, TagName, Tag, Comment ) \
 	TTypedNativeGameplayTag< TagType > TagName{ UE_PLUGIN_NAME, UE_MODULE_NAME, FName( TagType::GetFullTagStr( Tag ) ), TEXT( Comment ), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD }; \
-	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT in the private .cpp" );
+	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_TYPED_GAMEPLAY_TAG_COMMENT can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_TYPED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_TYPED_GAMEPLAY_TAG_COMMENT in the private .cpp" );
 
 /**
  * Defines a native gameplay tag with no comment that is externally declared in a header to allow other modules or code to use the created tag variable.
  */
-#define DEFINE_FILTERED_GAMEPLAY_TAG( TagType, TagName, Tag ) \
+#define DEFINE_TYPED_GAMEPLAY_TAG( TagType, TagName, Tag ) \
 	TTypedNativeGameplayTag< TagType > TagName{ UE_PLUGIN_NAME, UE_MODULE_NAME, FName( TagType::GetFullTagStr( Tag ) ), TEXT(""), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD }; \
-	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_FILTERED_GAMEPLAY_TAG can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_FILTERED_GAMEPLAY_TAG in the private .cpp" );
+	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_TYPED_GAMEPLAY_TAG can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_TYPED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_TYPED_GAMEPLAY_TAG in the private .cpp" );
 
 /**
  * Defines a native gameplay tag with a comment such that it's only available to the cpp file you define it in.
  */
-#define DEFINE_FILTERED_GAMEPLAY_TAG_STATIC_COMMENT( TagType, TagName, Tag, Comment ) \
+#define DEFINE_TYPED_GAMEPLAY_TAG_STATIC_COMMENT( TagType, TagName, Tag, Comment ) \
 	static TTypedNativeGameplayTag< TagType > TagName{ UE_PLUGIN_NAME, UE_MODULE_NAME, FName( TagType::GetFullTagStr( Tag ) ), TEXT( Comment ), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD }; \
-	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_FILTERED_GAMEPLAY_TAG_STATIC_COMMENT can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_FILTERED_GAMEPLAY_TAG_COMMENT in the private .cpp" );
+	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_TYPED_GAMEPLAY_TAG_STATIC_COMMENT can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_TYPED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_TYPED_GAMEPLAY_TAG_COMMENT in the private .cpp" );
 
 /**
  * Defines a native gameplay tag such that it's only available to the cpp file you define it in.
  */
-#define DEFINE_FILTERED_GAMEPLAY_TAG_STATIC( TagType, TagName, Tag ) \
+#define DEFINE_TYPED_GAMEPLAY_TAG_STATIC( TagType, TagName, Tag ) \
 	static TTypedNativeGameplayTag< TagType > TagName{ UE_PLUGIN_NAME, UE_MODULE_NAME, FName( TagType::GetFullTagStr( Tag ) ), TEXT(""), ENativeGameplayTagToken::PRIVATE_USE_MACRO_INSTEAD }; \
-	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_FILTERED_GAMEPLAY_TAG_STATIC can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_FILTERED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_FILTERED_GAMEPLAY_TAG in the private .cpp" );
+	static_assert( UE::GameplayTags::Private::HasFileExtension( __FILE__ ), "DEFINE_TYPED_GAMEPLAY_TAG_STATIC can only be used in .cpp files, if you're trying to share tags across modules, use DECLARE_TYPED_GAMEPLAY_TAG_EXTERN in the public header, and DEFINE_TYPED_GAMEPLAY_TAG in the private .cpp" );
 
 template< typename TagT>
 class TTypedNativeGameplayTag : public FNativeGameplayTag
@@ -200,7 +200,7 @@ class TTypedTagStaticImpl
 	{
 		UGameplayTagsManager::OnLastChanceToAddNativeTags().AddLambda( [ this ]()
 		{
-			// Force generate root tag, in case there is only filtered tags definition in C++ 
+			// Force generate root tag, in case there is only typed tags definition in C++ 
 			StaticImpl.RootTag = UGameplayTagsManager::Get().AddNativeGameplayTag( TagT::GetRootTagStr() );
 		} );
 	}
@@ -212,7 +212,7 @@ template <typename TagT>
 TTypedTagStaticImpl< TagT > TTypedTagStaticImpl< TagT >::StaticImpl;
 
 // Intended to be the absolute last thing in the definition of a tag
-#define END_FILTERED_TAG_DECL( TagType, TagRoot )	\
+#define END_TYPED_TAG_DECL( TagType, TagRoot )	\
 public:	\
 	TagType() { }	\
 	static TagType GetRootTag() { return TTypedTagStaticImpl<TagType>::StaticImpl.RootTag; }	\
