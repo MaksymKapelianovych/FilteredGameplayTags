@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class FilteredGameplayTags : ModuleRules
+public class TypedGameplayTags : ModuleRules
 {
-	public FilteredGameplayTags(ReadOnlyTargetRules Target) : base(Target)
+	public TypedGameplayTags(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 

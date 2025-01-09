@@ -2,4 +2,4 @@
 
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_MODULE( FDefaultModuleImpl, FilteredGameplayTags )
+IMPLEMENT_MODULE( FDefaultModuleImpl, TypedGameplayTags )
